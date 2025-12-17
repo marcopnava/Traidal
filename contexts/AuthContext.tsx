@@ -25,8 +25,9 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
   useEffect(() => {
     let mounted = true;
+    let profileLoadInProgress = false;
     
-    // Check active session with timeout
+    // Check active session
     const checkSession = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
@@ -50,10 +51,15 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
           setUser(basicUser);
           setLoading(false);
           
-          // Load profile in background
-          loadUserProfile(session.user, true).catch(() => {
-            // Silently fail
-          });
+          // Load profile in background only once
+          if (!profileLoadInProgress) {
+            profileLoadInProgress = true;
+            loadUserProfile(session.user, true).catch(() => {
+              // Silently fail
+            }).finally(() => {
+              profileLoadInProgress = false;
+            });
+          }
         } else {
           setUser(null);
           setLoading(false);
@@ -66,13 +72,6 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         }
       }
     };
-    
-    // Set timeout to prevent infinite loading
-    const timeoutId = setTimeout(() => {
-      if (mounted) {
-        setLoading(false);
-      }
-    }, 2000);
     
     checkSession();
 
@@ -89,10 +88,15 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         setUser(basicUser);
         setLoading(false);
         
-        // Load profile in background
-        loadUserProfile(session.user, true).catch(() => {
-          // Silently fail
-        });
+        // Load profile in background only once
+        if (!profileLoadInProgress) {
+          profileLoadInProgress = true;
+          loadUserProfile(session.user, true).catch(() => {
+            // Silently fail
+          }).finally(() => {
+            profileLoadInProgress = false;
+          });
+        }
       } else {
         setUser(null);
         setLoading(false);
@@ -101,24 +105,12 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
     return () => {
       mounted = false;
-      clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
   }, []);
 
   const loadUserProfile = async (supabaseUser: SupabaseUser, skipLoading = false) => {
     try {
-      // Set basic user info immediately for faster UI response
-      const basicUser: User = {
-        id: supabaseUser.id,
-        email: supabaseUser.email || '',
-        name: supabaseUser.email?.split('@')[0] || 'User'
-      };
-      
-      if (!skipLoading) {
-        setUser(basicUser);
-      }
-
       // Try to get profile - no timeout, let it complete naturally
       try {
         const { data: profile, error: profileError } = await supabase
@@ -128,10 +120,18 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
           .maybeSingle(); // Returns null if no profile exists, doesn't throw error
 
         if (profile && !profileError) {
-          setUser({
-            id: supabaseUser.id,
-            email: profile.email || supabaseUser.email || '',
-            name: profile.full_name || supabaseUser.email?.split('@')[0] || 'User'
+          // Only update if the name is different to avoid unnecessary re-renders
+          setUser(prevUser => {
+            const newUser = {
+              id: supabaseUser.id,
+              email: profile.email || supabaseUser.email || '',
+              name: profile.full_name || supabaseUser.email?.split('@')[0] || 'User'
+            };
+            // Only update if user data actually changed
+            if (prevUser?.name !== newUser.name || prevUser?.email !== newUser.email) {
+              return newUser;
+            }
+            return prevUser;
           });
         } else {
           // Profile doesn't exist, try to create it in background (don't wait)
@@ -157,16 +157,7 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       }
     } catch (error) {
       console.error('Error in loadUserProfile:', error);
-      // Fallback to basic user info
-      setUser({
-        id: supabaseUser.id,
-        email: supabaseUser.email || '',
-        name: supabaseUser.email?.split('@')[0] || 'User'
-      });
-    } finally {
-      if (!skipLoading) {
-        setLoading(false);
-      }
+      // Don't update user if there's an error, keep existing state
     }
   };
 

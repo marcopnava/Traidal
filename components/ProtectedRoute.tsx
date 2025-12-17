@@ -10,7 +10,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, loading, user } = useAuth();
 
   // Show loading only if still checking authentication
-  // Add a small delay to prevent flickering
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background dark:bg-gray-900">
@@ -24,17 +23,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <>{children}</>;
   }
 
-  // Not authenticated - only redirect if we're sure we're not loading
-  // This prevents redirect loops
-  if (!loading) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Fallback: show loading if we're not sure
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background dark:bg-gray-900">
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-accent border-t-transparent"></div>
-    </div>
-  );
+  // Not authenticated - redirect to login
+  return <Navigate to="/login" replace />;
 };
 
