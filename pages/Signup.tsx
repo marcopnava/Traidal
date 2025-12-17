@@ -48,32 +48,42 @@ export const Signup = () => {
 
   // Handle email confirmation redirect (Supabase puts tokens in hash with HashRouter)
   useEffect(() => {
-    const handleEmailConfirmation = async () => {
-      // Check for Supabase auth tokens in URL hash
-      const hash = window.location.hash;
-      if (hash.includes('access_token') || hash.includes('type=signup') || hash.includes('type=recovery')) {
-        try {
-          // Supabase will automatically handle the session from the URL
-          // Wait for auth state to update
-          const checkAuth = setInterval(() => {
-            if (isAuthenticated) {
-              clearInterval(checkAuth);
-              showSuccess('Email confirmed! Welcome to Traidal!');
-              // Clear the hash and navigate to dashboard
-              window.location.hash = '/';
-              navigate('/', { replace: true });
-            }
-          }, 500);
-          
-          // Clear interval after 10 seconds
-          setTimeout(() => clearInterval(checkAuth), 10000);
-        } catch (error) {
-          console.error('Email confirmation error:', error);
-        }
+    // Check for Supabase auth tokens in URL hash
+    const hash = window.location.hash;
+    if (hash.includes('access_token') || hash.includes('type=signup') || hash.includes('type=recovery')) {
+      let checkAuth: NodeJS.Timeout | null = null;
+      let timeout: NodeJS.Timeout | null = null;
+      
+      try {
+        // Supabase will automatically handle the session from the URL
+        // Wait for auth state to update
+        checkAuth = setInterval(() => {
+          if (isAuthenticated) {
+            if (checkAuth) clearInterval(checkAuth);
+            if (timeout) clearTimeout(timeout);
+            showSuccess('Email confirmed! Welcome to Traidal!');
+            // Clear the hash and navigate to dashboard
+            window.location.hash = '/';
+            navigate('/', { replace: true });
+          }
+        }, 500);
+        
+        // Clear interval after 10 seconds
+        timeout = setTimeout(() => {
+          if (checkAuth) clearInterval(checkAuth);
+        }, 10000);
+      } catch (error) {
+        console.error('Email confirmation error:', error);
+        if (checkAuth) clearInterval(checkAuth);
+        if (timeout) clearTimeout(timeout);
       }
-    };
-
-    handleEmailConfirmation();
+      
+      // Cleanup function
+      return () => {
+        if (checkAuth) clearInterval(checkAuth);
+        if (timeout) clearTimeout(timeout);
+      };
+    }
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {

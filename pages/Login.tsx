@@ -15,11 +15,14 @@ export const Login = () => {
 
   // Handle email confirmation redirect (if user comes from email link)
   useEffect(() => {
-    const hash = window.location.hash;
-    if ((hash.includes('access_token') || hash.includes('type=signup')) && isAuthenticated) {
-      showSuccess('Email confirmed! Welcome to Traidal!');
-      window.location.hash = '/';
-      navigate('/', { replace: true });
+    // Only run this on the login page
+    if (window.location.hash.includes('#/login') || window.location.hash === '#/') {
+      const hash = window.location.hash;
+      if ((hash.includes('access_token') || hash.includes('type=signup')) && isAuthenticated) {
+        showSuccess('Email confirmed! Welcome to Traidal!');
+        window.location.hash = '/';
+        navigate('/', { replace: true });
+      }
     }
   }, [isAuthenticated, navigate]);
 
