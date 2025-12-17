@@ -340,7 +340,6 @@ export const Alerts = () => {
                       </div>
                     );
                   })}
-                }
               </div>
             )}
           </div>
@@ -574,7 +573,6 @@ export const Alerts = () => {
             </Card>
           </div>
         )}
-      }
     </div>
   );
 };
