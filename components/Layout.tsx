@@ -4,7 +4,7 @@ import { LayoutDashboard, BookOpen, Users, Settings, Calendar as CalendarIcon, M
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useAlerts } from '../contexts/AlertsContext';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { useNavigate } from 'react-router-dom';
 import { showSuccess } from '../components/ui/Toast';
 
@@ -54,17 +54,12 @@ export const Layout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       </button>
 
       {/* Mobile Overlay */}
-      <AnimatePresence mode="wait">
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
-          />
-        )}
-      </AnimatePresence>
+      {isMobileMenuOpen && (
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+        />
+      )}
 
       {/* Sidebar */}
       <aside
