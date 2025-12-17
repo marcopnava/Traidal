@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LogIn, TrendingUp } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import { showError, showSuccess } from '../components/ui/Toast';
 import { SplashScreen } from '../components/ui/SplashScreen';
+import { Logo } from '../components/ui/Logo';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -85,11 +86,8 @@ export const Login = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <TrendingUp size={40} className="text-accent" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Traidal<span className="text-accent">.</span>
-            </h1>
+          <div className="mb-4">
+            <Logo size="xl" />
           </div>
           <p className="text-gray-600 dark:text-gray-400">Your Trading Journal Platform</p>
         </div>

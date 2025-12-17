@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { UserPlus, TrendingUp, Eye, EyeOff, Globe, DollarSign, Mail, CheckCircle } from 'lucide-react';
+import { UserPlus, Eye, EyeOff, Globe, DollarSign, Mail, CheckCircle } from 'lucide-react';
 import { showError, showSuccess } from '../components/ui/Toast';
 // import { motion } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { CustomSelect, SelectOption } from '../components/ui/CustomSelect';
 import { supabase } from '../lib/supabase';
+import { Logo } from '../components/ui/Logo';
 
 const timezoneOptions: SelectOption[] = [
   { value: 'UTC', label: 'UTC', description: 'Coordinated Universal Time', icon: <Globe size={18} className="text-accent" /> },
@@ -162,11 +163,8 @@ export const Signup = () => {
         <div className="w-full max-w-lg">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 mb-4">
-              <TrendingUp size={40} className="text-accent" />
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-                Traidal<span className="text-accent">.</span>
-              </h1>
+            <div className="mb-4">
+              <Logo size="xl" />
             </div>
           </div>
 
@@ -214,11 +212,8 @@ export const Signup = () => {
       <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <TrendingUp size={40} className="text-accent" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Traidal<span className="text-accent">.</span>
-            </h1>
+          <div className="mb-4">
+            <Logo size="xl" />
           </div>
           <p className="text-gray-600 dark:text-gray-400">Create your Trading Journal account</p>
         </div>
