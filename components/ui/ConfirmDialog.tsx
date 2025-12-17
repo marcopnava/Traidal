@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { AlertTriangle, X } from 'lucide-react';
 
 interface ConfirmDialogProps {
@@ -28,24 +28,16 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence mode="wait">
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200]"
-          />
-          <div className="fixed inset-0 z-[201] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-md w-full p-6"
-            >
+    <>
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200]"
+      />
+      <div className="fixed inset-0 z-[201] flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-md w-full p-6">
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-full ${
                   variant === 'danger' 
@@ -92,11 +84,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                   {confirmText}
                 </button>
               </div>
-            </motion.div>
-          </div>
-        </>
-      )}
-    </AnimatePresence>
+        </div>
+      </div>
+    </>
   );
 };
 
