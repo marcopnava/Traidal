@@ -265,27 +265,30 @@ function transformAccountFromDB(db: any): Account {
 }
 
 function transformAccountToDB(account: Account, userId: string): any {
+  // Convert undefined to null for Supabase (Supabase doesn't accept undefined)
+  const toNull = (value: any) => value === undefined ? null : value;
+  
   return {
     id: account.id,
     user_id: userId,
     name: account.name,
     type: account.type,
     broker: account.broker,
-    phase: account.phase,
-    challenge_type: account.challengeType,
+    phase: toNull(account.phase),
+    challenge_type: toNull(account.challengeType),
     currency: account.currency,
     initial_balance: account.initialBalance,
-    challenge_cost: account.challengeCost,
-    max_drawdown_limit: account.maxDrawdownLimit,
-    daily_drawdown_limit: account.dailyDrawdownLimit,
-    profit_split_percent: account.profitSplitPercent,
-    phase1_profit_target: account.phase1ProfitTarget,
-    phase2_profit_target: account.phase2ProfitTarget,
-    funded_profit_target: account.fundedProfitTarget,
-    phase1_profit_target_percent: account.phase1ProfitTargetPercent,
-    phase2_profit_target_percent: account.phase2ProfitTargetPercent,
-    funded_profit_target_percent: account.fundedProfitTargetPercent,
-    current_phase_pnl: account.currentPhasePnL,
+    challenge_cost: toNull(account.challengeCost),
+    max_drawdown_limit: toNull(account.maxDrawdownLimit),
+    daily_drawdown_limit: toNull(account.dailyDrawdownLimit),
+    profit_split_percent: toNull(account.profitSplitPercent),
+    phase1_profit_target: toNull(account.phase1ProfitTarget),
+    phase2_profit_target: toNull(account.phase2ProfitTarget),
+    funded_profit_target: toNull(account.fundedProfitTarget),
+    phase1_profit_target_percent: toNull(account.phase1ProfitTargetPercent),
+    phase2_profit_target_percent: toNull(account.phase2ProfitTargetPercent),
+    funded_profit_target_percent: toNull(account.fundedProfitTargetPercent),
+    current_phase_pnl: toNull(account.currentPhasePnL),
     status: account.status
   };
 }

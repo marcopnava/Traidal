@@ -103,11 +103,46 @@ export const CreateAccountModal: React.FC<{ onAccountCreated?: () => void }> = (
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Validate required fields
+      if (!formData.name || !formData.name.trim()) {
+        showError('Account name is required');
+        return;
+      }
+      if (!formData.type) {
+        showError('Account type is required');
+        return;
+      }
+      if (!formData.broker) {
+        showError('Broker is required');
+        return;
+      }
+      if (!formData.currency) {
+        showError('Currency is required');
+        return;
+      }
+      if (!formData.initialBalance || formData.initialBalance <= 0) {
+        showError('Initial balance must be greater than 0');
+        return;
+      }
+      
+      // For PROP accounts, validate challenge type and phase
+      if (formData.type === AccountType.PROP) {
+        if (!formData.challengeType) {
+          showError('Challenge type is required for PROP accounts');
+          return;
+        }
+        if (!formData.phase) {
+          showError('Current phase is required for PROP accounts');
+          return;
+        }
+      }
+
       const newAccount: Account = {
         ...formData as Account,
         id: editingId || uuidv4(),
         createdAt: editingId ? (accounts.find(a => a.id === editingId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
-        status: formData.status || AccountStatus.ACTIVE
+        status: formData.status || AccountStatus.ACTIVE,
+        name: formData.name.trim()
       };
 
       await SupabaseService.saveAccount(newAccount);
@@ -117,9 +152,11 @@ export const CreateAccountModal: React.FC<{ onAccountCreated?: () => void }> = (
       if (onAccountCreated) {
         onAccountCreated();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving account:', error);
-      showError('Failed to save account');
+      // Show more specific error message
+      const errorMessage = error?.message || error?.error?.message || 'Failed to save account';
+      showError(errorMessage);
     }
   };
 
