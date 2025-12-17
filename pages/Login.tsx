@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LogIn, TrendingUp } from 'lucide-react';
@@ -10,13 +10,23 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   // Handle email confirmation redirect (if user comes from email link)
   useEffect(() => {
-    // Only run this on the login page
-    if (window.location.hash.includes('#/login') || window.location.hash === '#/') {
+    // Only run this on the login page and when not loading
+    if (!loading && window.location.hash.includes('#/login')) {
       const hash = window.location.hash;
       if ((hash.includes('access_token') || hash.includes('type=signup')) && isAuthenticated) {
         showSuccess('Email confirmed! Welcome to Traidal!');
@@ -24,22 +34,28 @@ export const Login = () => {
         navigate('/', { replace: true });
       }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return; // Prevent double submission
+    
     setIsLoading(true);
 
     try {
       await login(email, password);
       showSuccess('Welcome back!');
-      setIsLoading(false);
       
       // Mostra splash screen prima di navigare
       setShowSplash(true);
       
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
       // Naviga dopo 2 secondi (durata splash screen)
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         navigate('/', { replace: true });
       }, 2000);
     } catch (error: any) {
