@@ -7,7 +7,7 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { EmptyState } from '../components/ui/EmptyState';
 import { BackButton } from '../components/ui/BackButton';
 import { showSuccess, showError } from '../components/ui/Toast';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { useAccountModal } from '../contexts/AccountModalContext';
 import { CreateAccountModal } from '../components/accounts/CreateAccountModal';
 
@@ -103,12 +103,7 @@ export const Accounts = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {accounts.map((acc, index) => (
-          <motion.div
-            key={acc.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
+          <div key={acc.id}>
             <Card className="relative group overflow-hidden border border-transparent hover:border-gray-200 dark:hover:border-gray-600">
               <div className={`absolute top-0 left-0 w-2 h-full ${acc.type === AccountType.REAL ? 'bg-blue-500' : 'bg-accent'}`} />
               
@@ -168,7 +163,7 @@ export const Accounts = () => {
                 </div>
               </div>
             </Card>
-          </motion.div>
+          </div>
         ))}
       </div>
 
