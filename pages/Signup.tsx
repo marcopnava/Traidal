@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { UserPlus, TrendingUp, Eye, EyeOff, Globe, DollarSign, Mail, CheckCircle } from 'lucide-react';
 import { showError, showSuccess } from '../components/ui/Toast';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { CustomSelect, SelectOption } from '../components/ui/CustomSelect';
 import { supabase } from '../lib/supabase';
 
@@ -159,12 +159,7 @@ export const Signup = () => {
   if (emailSent) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-accent-soft to-background dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-lg"
-        >
+        <div className="w-full max-w-lg">
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 mb-4">
@@ -176,12 +171,7 @@ export const Signup = () => {
           </div>
 
           {/* Email Confirmation Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700 text-center"
-          >
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700 text-center">
             <div className="mb-6 flex justify-center">
               <div className="p-4 bg-green-100 dark:bg-green-900/30 rounded-full">
                 <Mail size={48} className="text-green-600 dark:text-green-400" />
@@ -213,20 +203,15 @@ export const Signup = () => {
             >
               Back to Login
             </Link>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent-soft to-background dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-lg"
-      >
+      <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
@@ -239,12 +224,7 @@ export const Signup = () => {
         </div>
 
         {/* Signup Card */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.5 }}
-          className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700"
-        >
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create Account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -399,13 +379,13 @@ export const Signup = () => {
               </Link>
             </p>
           </div>
-        </motion.div>
+        </div>
 
         {/* Footer */}
         <p className="text-center mt-6 text-sm text-gray-500 dark:text-gray-400">
           © 2025 Traidal. Track, Analyze, Improve.
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 };
