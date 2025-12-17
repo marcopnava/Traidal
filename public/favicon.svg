@@ -1,27 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Background circle with accent color -->
-  <rect width="100" height="100" rx="20" fill="#f3b43f"/>
+  <!-- Background: light off-white -->
+  <rect width="100" height="100" fill="#fcfbf7"/>
   
-  <!-- TrendingUp icon (simplified arrow pointing up-right) -->
-  <path d="M 30 70 L 50 50 L 60 60 L 70 30" 
-        stroke="white" 
-        stroke-width="6" 
-        stroke-linecap="round" 
-        stroke-linejoin="round" 
-        fill="none"/>
-  <path d="M 70 30 L 70 45 L 55 45" 
-        stroke="white" 
-        stroke-width="6" 
-        stroke-linecap="round" 
-        stroke-linejoin="round" 
-        fill="none"/>
-  
-  <!-- Letter "T" at the bottom -->
-  <text x="50" y="85" 
+  <!-- Text "Traidal" - simplified for small size -->
+  <!-- Letter "T" -->
+  <text x="20" y="60" 
         font-family="Arial, sans-serif" 
-        font-size="28" 
+        font-size="50" 
         font-weight="bold" 
-        fill="white" 
-        text-anchor="middle">T</text>
+        fill="#1a1a1a">T</text>
+  
+  <!-- Golden-yellow square accent -->
+  <rect x="70" y="50" width="20" height="20" fill="#f3b43f" rx="2"/>
 </svg>
-
