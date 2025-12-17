@@ -7,6 +7,7 @@ import { useAlerts } from '../contexts/AlertsContext';
 // import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { useNavigate } from 'react-router-dom';
 import { showSuccess } from '../components/ui/Toast';
+import { Logo } from './ui/Logo';
 
 const SidebarItem = ({ to, icon: Icon, label, badge }: { to: string, icon: any, label: string, badge?: number }) => (
   <NavLink
@@ -69,9 +70,7 @@ export const Layout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       >
         <div className="p-8 flex items-center justify-between border-b border-gray-100 dark:border-gray-800">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Traidal<span className="text-accent">.</span>
-            </h1>
+            <Logo size="lg" />
             {user && (
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{user.email}</p>
             )}
