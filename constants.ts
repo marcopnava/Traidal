@@ -1,9 +1,10 @@
-import { Broker, AccountType, Currency, PropPhase } from './types';
+import { Broker, AccountType, Currency, PropPhase, PropChallengeType } from './types';
 
 export const BROKERS = Object.values(Broker);
 export const ACCOUNT_TYPES = Object.values(AccountType);
 export const CURRENCIES = Object.values(Currency);
 export const PROP_PHASES = Object.values(PropPhase);
+export const CHALLENGE_TYPES = Object.values(PropChallengeType);
 
 export const TRADING_PAIRS = [
   // Forex Major

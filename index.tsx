@@ -8,8 +8,5 @@ if (!rootElement) {
 }
 
 const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Removed StrictMode to eliminate double renders that cause flickering
+root.render(<App />);

@@ -1,6 +1,8 @@
 export enum AccountType {
   REAL = 'REAL',
-  PROP = 'PROP'
+  DEMO = 'DEMO',
+  PROP = 'PROP',
+  FUNDED = 'FUNDED'
 }
 
 export enum Broker {
@@ -16,6 +18,12 @@ export enum PropPhase {
   PHASE_2 = 'PHASE_2',
   INSTANT = 'INSTANT',
   FUNDED = 'FUNDED'
+}
+
+export enum PropChallengeType {
+  ONE_PHASE = 'ONE_PHASE',
+  TWO_PHASE = 'TWO_PHASE',
+  INSTANT = 'INSTANT'
 }
 
 export enum AccountStatus {
@@ -47,12 +55,23 @@ export interface Account {
   type: AccountType;
   broker: Broker;
   phase?: PropPhase;
+  challengeType?: PropChallengeType;
   currency: Currency;
   initialBalance: number;
   challengeCost?: number;
   maxDrawdownLimit?: number; // Absolute value or calculated amount
   dailyDrawdownLimit?: number;
   profitSplitPercent?: number;
+  
+  // PROP Phase Targets
+  phase1ProfitTarget?: number;
+  phase2ProfitTarget?: number;
+  fundedProfitTarget?: number;
+  phase1ProfitTargetPercent?: number; // Percentuale del conto per Phase 1
+  phase2ProfitTargetPercent?: number; // Percentuale del conto per Phase 2
+  fundedProfitTargetPercent?: number; // Percentuale del conto per Funded
+  currentPhasePnL?: number; // Profit/Loss nella fase corrente (si resetta al cambio fase)
+  
   status: AccountStatus;
   createdAt: string;
 }
@@ -79,7 +98,9 @@ export interface Trade {
   stopLoss: number;
   takeProfit: number;
   totalLots: number;
-  totalPnl: number; // Includes partials
+  totalPnl: number; // Base P&L (senza commissioni/swap)
+  commission?: number; // Commissioni (positive o negative)
+  swap?: number; // Swap (positive o negative)
   riskReward: number;
   screenshotUrl?: string;
   notes?: string;
@@ -89,21 +110,43 @@ export interface Trade {
 
 // Alert Types
 export enum AlertSeverity {
+  INFO = 'INFO',
+  SUCCESS = 'SUCCESS',
   WARNING = 'WARNING',
   DANGER = 'DANGER',
   CRITICAL = 'CRITICAL'
 }
 
+export enum AlertType {
+  MAX_DD = 'MAX_DD',
+  DAILY_DD = 'DAILY_DD',
+  PROFIT_TARGET = 'PROFIT_TARGET',
+  PHASE_PASSED = 'PHASE_PASSED'
+}
+
 export interface TradingAlert {
   id: string;
   accountId: string;
-  type: 'MAX_DD' | 'DAILY_DD';
+  type: AlertType;
   severity: AlertSeverity;
+  message: string;
   currentValue: number;
   limitValue: number;
   percentage: number;
   isRead: boolean;
   createdAt: string;
+}
+
+export interface AlertSettings {
+  maxDrawdownWarning: number; // Percentage (default 70)
+  maxDrawdownDanger: number; // Percentage (default 80)
+  maxDrawdownCritical: number; // Percentage (default 90)
+  dailyDrawdownWarning: number; // Percentage (default 60)
+  dailyDrawdownDanger: number; // Percentage (default 80)
+  dailyDrawdownCritical: number; // Percentage (default 90)
+  profitTargetInfo: number; // Percentage (default 80)
+  enableSounds: boolean;
+  enableNotifications: boolean;
 }
 
 export interface DashboardStats {
