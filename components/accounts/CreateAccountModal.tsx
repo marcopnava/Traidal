@@ -525,11 +525,9 @@ export const CreateAccountModal: React.FC<{ onAccountCreated?: () => void }> = (
                   </button>
                 </div>
               </form>
-            </motion.div>
-          </div>
-        </>
-      )}
-    </AnimatePresence>
+        </div>
+      </div>
+    </>
   );
 };
 
