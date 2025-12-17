@@ -23,13 +23,34 @@ export const SupabaseService = {
     if (!user) throw new Error('Not authenticated');
     
     const dbAccount = transformAccountToDB(account, user.id);
-    const { error } = await supabase
+    
+    // Log the data being sent (for debugging)
+    console.log('Saving account to DB:', {
+      ...dbAccount,
+      initial_balance: dbAccount.initial_balance,
+      user_id: dbAccount.user_id
+    });
+    
+    const { data, error } = await supabase
       .from('accounts')
-      .upsert(dbAccount);
+      .upsert(dbAccount, {
+        onConflict: 'id'
+      })
+      .select();
     
     if (error) {
       console.error('Error saving account:', error);
-      throw error;
+      console.error('Error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
+      throw new Error(error.message || 'Failed to save account');
+    }
+    
+    if (!data || data.length === 0) {
+      throw new Error('Account saved but no data returned');
     }
   },
 

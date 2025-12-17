@@ -154,8 +154,9 @@ export const CreateAccountModal: React.FC<{ onAccountCreated?: () => void }> = (
       }
     } catch (error: any) {
       console.error('Error saving account:', error);
+      console.error('Full error object:', error);
       // Show more specific error message
-      const errorMessage = error?.message || error?.error?.message || 'Failed to save account';
+      const errorMessage = error?.message || error?.error?.message || error?.details || 'Failed to save account. Please check the console for details.';
       showError(errorMessage);
     }
   };
