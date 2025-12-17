@@ -10,7 +10,7 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { EmptyState } from '../components/ui/EmptyState';
 import { BackButton } from '../components/ui/BackButton';
 import { showSuccess, showError } from '../components/ui/Toast';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { CustomSelect, SelectOption } from '../components/ui/CustomSelect';
 import { handleNumberInputFocus } from '../utils/inputHelpers';
 import { CustomDateTimePicker } from '../components/ui/CustomDateTimePicker';
@@ -479,10 +479,7 @@ export const Journal = () => {
             <tbody className="text-sm">
                 {filteredTrades.map((trade, index) => (
                   <React.Fragment key={trade.id}>
-                    <motion.tr
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
+                    <tr
                       onClick={() => toggleTradeExpansion(trade.id)}
                       className={`border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors cursor-pointer ${
                         expandedTradeId === trade.id ? 'bg-accent-soft dark:bg-accent/10' : ''
@@ -554,7 +551,7 @@ export const Journal = () => {
                             Base: {trade.totalPnl >= 0 ? '+' : ''}{trade.totalPnl.toFixed(2)}
                             {trade.commission && ` | Comm: ${trade.commission >= 0 ? '+' : ''}${trade.commission.toFixed(2)}`}
                             {trade.swap && ` | Swap: ${trade.swap >= 0 ? '+' : ''}${trade.swap.toFixed(2)}`}
-                          </span>
+                    </span>
                         )}
                       </div>
                   </td>
@@ -583,24 +580,13 @@ export const Journal = () => {
                          </button>
                     </div>
                   </td>
-                  </motion.tr>
+                </tr>
 
                   {/* Expanded Trade Details */}
-                  <AnimatePresence mode="wait">
-                    {expandedTradeId === trade.id && (
-                      <motion.tr
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
+                  {expandedTradeId === trade.id && (
+                      <tr>
                         <td colSpan={9} className="bg-gray-50 dark:bg-gray-800/50 p-0">
-                          <motion.div
-                            initial={{ y: -20 }}
-                            animate={{ y: 0 }}
-                            exit={{ y: -20 }}
-                            className="p-6"
-                          >
+                          <div className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                               {/* Trade Info */}
                               <div className="space-y-3">
@@ -766,11 +752,10 @@ export const Journal = () => {
                                 </p>
                               </div>
                             )}
-                          </motion.div>
+                          </div>
                   </td>
-                      </motion.tr>
+                </tr>
               )}
-                  </AnimatePresence>
                   </React.Fragment>
                 ))}
             </tbody>
@@ -803,21 +788,14 @@ export const Journal = () => {
         variant="danger"
       />
 
-      {/* Move to Account Modal */}
-      <AnimatePresence mode="wait">
+        {/* Move to Account Modal */}
         {moveToAccountModal && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               onClick={() => setMoveToAccountModal(false)}
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
             />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+            <div
               className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl shadow-2xl z-[101] p-6"
             >
               <div className="flex items-center justify-between mb-4">
@@ -877,27 +855,19 @@ export const Journal = () => {
                   Move {selectedTradeIds.length} Trade(s)
                 </button>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+            </div>
+            </>
+          )}
 
-      {/* Add/Edit Modal */}
-      <AnimatePresence mode="wait">
+        {/* Add/Edit Modal */}
       {isModalOpen && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               onClick={() => setIsModalOpen(false)}
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
             />
             <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+              <div
                 className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto relative"
               >
                 <button
@@ -1054,7 +1024,7 @@ export const Journal = () => {
                     />
                  </div>
               </div>
-
+              
               {/* Commission & Swap */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -1137,11 +1107,10 @@ export const Journal = () => {
                 </button>
               </div>
             </form>
-              </motion.div>
           </div>
-          </>
-      )}
-      </AnimatePresence>
-    </div>
-  );
+        </div>
+            </>
+        )}
+      </div>
+    );
 };

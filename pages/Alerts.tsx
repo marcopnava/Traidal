@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { useAlerts } from '../contexts/AlertsContext';
 import { Card } from '../components/ui/Card';
 import { BackButton } from '../components/ui/BackButton';
@@ -183,10 +183,8 @@ export const Alerts = () => {
               )}
             </div>
             {activeTab === 'alerts' && (
-              <motion.div
-                layoutId="activeTab"
+              <div
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent rounded-t-full"
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
             )}
           </button>
@@ -203,10 +201,8 @@ export const Alerts = () => {
               <span>Settings</span>
             </div>
             {activeTab === 'settings' && (
-              <motion.div
-                layoutId="activeTab"
+              <div
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent rounded-t-full"
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
             )}
           </button>
@@ -214,15 +210,8 @@ export const Alerts = () => {
       </div>
 
       {/* Tab Content */}
-      <AnimatePresence mode="wait">
-        {activeTab === 'alerts' && (
-          <motion.div
-            key="alerts"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
+      {activeTab === 'alerts' && (
+          <div>
             <div className="flex items-center justify-between mb-6">
               {alerts.length > 0 && (
                 <button
@@ -244,20 +233,13 @@ export const Alerts = () => {
               />
             ) : (
               <div className="space-y-4">
-                <AnimatePresence mode="wait">
-                  {sortedAlerts.map((alert, index) => {
+                {sortedAlerts.map((alert, index) => {
                     const severityConfig = getSeverityConfig(alert.severity);
                     const TypeIcon = getTypeIcon(alert.type);
                     const SeverityIcon = severityConfig.icon;
                     
                     return (
-                      <motion.div
-                        key={alert.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: -100 }}
-                        transition={{ delay: index * 0.05 }}
-                      >
+                      <div key={alert.id}>
                         <Card
                           className={`relative ${severityConfig.bgColor} ${severityConfig.borderColor} border-2 ${
                             !alert.isRead ? 'ring-2 ring-accent/30' : ''
@@ -355,23 +337,17 @@ export const Alerts = () => {
                             </div>
                           </div>
                         </Card>
-                      </motion.div>
+                      </div>
                     );
                   })}
-                </AnimatePresence>
+                }
               </div>
             )}
-          </motion.div>
+          </div>
         )}
 
         {activeTab === 'settings' && (
-          <motion.div
-            key="settings"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
+          <div>
             <Card>
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
@@ -596,9 +572,9 @@ export const Alerts = () => {
                 </div>
               </div>
             </Card>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      }
     </div>
   );
 };

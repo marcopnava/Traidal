@@ -6,7 +6,7 @@ import { SupabaseService } from '../services/supabaseService';
 import { calculateAccountStats } from '../utils/calculations';
 import { TrendingUp, TrendingDown, DollarSign, BarChart3, BookOpen, Target, Shield, Activity, Calendar, ExternalLink, Edit, Download, Trophy, XCircle, CheckCircle, AlertCircle, GitCompare, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { format, differenceInDays } from 'date-fns';
 
 export const AccountsOverview = () => {
@@ -288,10 +288,7 @@ export const AccountsOverview = () => {
             <tbody>
               {accountsStats.map((stat, index) => (
                 <React.Fragment key={stat.account.id}>
-                  <motion.tr
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: index * 0.05 }}
+                  <tr
                     onClick={() => toggleExpand(stat.account.id)}
                     className={`border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 cursor-pointer transition-colors ${
                       expandedAccountId === stat.account.id ? 'bg-accent/5 dark:bg-accent/10' : ''
@@ -362,17 +359,11 @@ export const AccountsOverview = () => {
                         {stat.account.status}
                       </span>
                     </td>
-                  </motion.tr>
+                  </tr>
 
                   {/* Expandable Row */}
-                  <AnimatePresence mode="wait">
-                    {expandedAccountId === stat.account.id && (
-                      <motion.tr
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
+                  {expandedAccountId === stat.account.id && (
+                      <tr>
                         <td colSpan={10} className="p-0">
                           <div className="p-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-600">
                             {/* Main Grid - 3 Columns */}
@@ -578,10 +569,8 @@ export const AccountsOverview = () => {
                                           </span>
                                         </div>
                                         <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 overflow-hidden">
-                                          <motion.div
-                                            initial={{ width: 0 }}
-                                            animate={{ width: `${getPhaseProgress(stat.account, stat)!.progress}%` }}
-                                            transition={{ duration: 0.5, delay: 0.2 }}
+                                          <div
+                                            style={{ width: `${getPhaseProgress(stat.account, stat)!.progress}%` }}
                                             className="h-full bg-gradient-to-r from-accent to-orange-500 rounded-full"
                                           />
                                         </div>
@@ -675,34 +664,26 @@ export const AccountsOverview = () => {
                             </div>
                           </div>
                         </td>
-                      </motion.tr>
-                    )}
-                  </AnimatePresence>
-                </React.Fragment>
-              ))}
+                        </tr>
+                      )}
+                  </React.Fragment>
+                ))}
             </tbody>
           </table>
         </div>
       </Card>
 
-      {/* Compare Modal */}
-      <AnimatePresence mode="wait">
+        {/* Compare Modal */}
         {showCompare && (
           <>
             {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               onClick={() => setShowCompare(false)}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
             />
             
             {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+            <div
               className="fixed inset-4 md:inset-10 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl z-50 overflow-hidden flex flex-col"
             >
               {/* Header */}
@@ -955,11 +936,10 @@ export const AccountsOverview = () => {
                   </table>
                 </div>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+            </div>
+            </>
+          )}
+      </div>
+    );
 };
 
