@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { UserPlus, TrendingUp, Eye, EyeOff, Globe, DollarSign } from 'lucide-react';
+import { UserPlus, TrendingUp, Eye, EyeOff, Globe, DollarSign, Mail, CheckCircle } from 'lucide-react';
 import { showError, showSuccess } from '../components/ui/Toast';
 import { motion } from 'framer-motion';
 import { CustomSelect, SelectOption } from '../components/ui/CustomSelect';
@@ -41,8 +41,40 @@ export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useAuth();
+  const [emailSent, setEmailSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const { signup, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Handle email confirmation redirect (Supabase puts tokens in hash with HashRouter)
+  useEffect(() => {
+    const handleEmailConfirmation = async () => {
+      // Check for Supabase auth tokens in URL hash
+      const hash = window.location.hash;
+      if (hash.includes('access_token') || hash.includes('type=signup') || hash.includes('type=recovery')) {
+        try {
+          // Supabase will automatically handle the session from the URL
+          // Wait for auth state to update
+          const checkAuth = setInterval(() => {
+            if (isAuthenticated) {
+              clearInterval(checkAuth);
+              showSuccess('Email confirmed! Welcome to Traidal!');
+              // Clear the hash and navigate to dashboard
+              window.location.hash = '/';
+              navigate('/', { replace: true });
+            }
+          }, 500);
+          
+          // Clear interval after 10 seconds
+          setTimeout(() => clearInterval(checkAuth), 10000);
+        } catch (error) {
+          console.error('Email confirmation error:', error);
+        }
+      }
+    };
+
+    handleEmailConfirmation();
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,8 +117,10 @@ export const Signup = () => {
             .eq('id', user.id);
         }
 
-        showSuccess('Account created successfully! Welcome to Traidal!');
-        navigate('/');
+        // Show email confirmation message instead of navigating
+        setEmailSent(true);
+        setUserEmail(formData.email);
+        showSuccess('Account created successfully!');
       } else {
         showError('Failed to create account. Please try again.');
       }
@@ -110,6 +144,70 @@ export const Signup = () => {
       setIsLoading(false);
     }
   };
+
+  // Show email confirmation message
+  if (emailSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-accent-soft to-background dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-lg"
+        >
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 mb-4">
+              <TrendingUp size={40} className="text-accent" />
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+                Traidal<span className="text-accent">.</span>
+              </h1>
+            </div>
+          </div>
+
+          {/* Email Confirmation Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700 text-center"
+          >
+            <div className="mb-6 flex justify-center">
+              <div className="p-4 bg-green-100 dark:bg-green-900/30 rounded-full">
+                <Mail size={48} className="text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+            
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Check Your Email
+            </h2>
+            
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              We've sent a confirmation email to <strong className="text-gray-900 dark:text-white">{userEmail}</strong>
+            </p>
+            
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-4 mb-6">
+              <p className="text-sm text-blue-800 dark:text-blue-300">
+              <CheckCircle size={16} className="inline mr-2" />
+              Please check your inbox and click the confirmation link to activate your account and access the platform.
+              </p>
+            </div>
+            
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
+              Didn't receive the email? Check your spam folder or try signing up again.
+            </p>
+            
+            <Link
+              to="/login"
+              className="text-accent hover:text-accent/80 font-semibold transition-colors"
+            >
+              Back to Login
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent-soft to-background dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">

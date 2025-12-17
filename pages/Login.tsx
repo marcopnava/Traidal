@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LogIn, TrendingUp } from 'lucide-react';
@@ -10,8 +10,18 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Handle email confirmation redirect (if user comes from email link)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if ((hash.includes('access_token') || hash.includes('type=signup')) && isAuthenticated) {
+      showSuccess('Email confirmed! Welcome to Traidal!');
+      window.location.hash = '/';
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -213,13 +213,17 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
   const signup = async (email: string, password: string, fullName?: string): Promise<boolean> => {
     try {
+      // Get the current site URL for redirect
+      const siteUrl = window.location.origin + window.location.pathname;
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             full_name: fullName || email.split('@')[0]
-          }
+          },
+          emailRedirectTo: `${siteUrl}#/`
         }
       });
 
