@@ -16,16 +16,18 @@ import { AlertsProvider } from './contexts/AlertsContext';
 import { AccountModalProvider } from './contexts/AccountModalContext';
 import { ToastProvider } from './components/ui/Toast';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <AccountModalProvider>
-          <AlertsProvider>
-            <HashRouter>
-              <ToastProvider />
-              <Routes>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <AccountModalProvider>
+            <AlertsProvider>
+              <HashRouter>
+                <ToastProvider />
+                <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -87,6 +89,7 @@ const App = () => {
         </AccountModalProvider>
       </AuthProvider>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 
