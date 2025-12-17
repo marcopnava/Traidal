@@ -5,7 +5,7 @@ import { BROKERS, CURRENCIES } from '../../constants';
 import { Target, X } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { showSuccess, showError } from '../ui/Toast';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 import { handleNumberInputFocus, formatNumberInputValue } from '../../utils/inputHelpers';
 import { CustomSelect, SelectOption } from '../ui/CustomSelect';
 import { Briefcase, DollarSign, Zap, TrendingUp } from 'lucide-react';
@@ -123,25 +123,19 @@ export const CreateAccountModal: React.FC<{ onAccountCreated?: () => void }> = (
     }
   };
 
+  if (!isModalOpen) return null;
+
   return (
-    <AnimatePresence mode="wait">
-      {isModalOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeAccountModal}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
-          />
-          <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto relative"
-            >
+    <>
+      <div
+        onClick={closeAccountModal}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
+      />
+      <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto relative"
+        >
               <button
                 onClick={closeAccountModal}
                 className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"

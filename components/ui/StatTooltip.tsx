@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Temporarily disabled to fix build issue
 
 export interface StatTooltipItem {
   label: string;
@@ -54,22 +54,15 @@ export const StatTooltip: React.FC<StatTooltipProps> = ({
           </div>
         </Tooltip.Trigger>
         
-        <AnimatePresence mode="wait">
-          {open && (
-            <Tooltip.Portal forceMount>
-              <Tooltip.Content
-                side={side}
-                sideOffset={8}
-                align="center"
-                asChild
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: side === 'top' ? 10 : -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: side === 'top' ? 10 : -10 }}
-                  transition={{ duration: 0.15, ease: 'easeOut' }}
-                  className="z-50 min-w-[280px] max-w-[360px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl shadow-2xl p-5"
-                >
+        {open && (
+          <Tooltip.Portal forceMount>
+            <Tooltip.Content
+              side={side}
+              sideOffset={8}
+              align="center"
+              className="z-50 min-w-[280px] max-w-[360px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl shadow-2xl p-5"
+            >
+              <div>
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
                     {icon && (
@@ -106,17 +99,16 @@ export const StatTooltip: React.FC<StatTooltipProps> = ({
                     ))}
                   </div>
 
-                  {/* Arrow */}
-                  <Tooltip.Arrow
-                    className="fill-white dark:fill-gray-800"
-                    width={12}
-                    height={6}
-                  />
-                </motion.div>
-              </Tooltip.Content>
-            </Tooltip.Portal>
-          )}
-        </AnimatePresence>
+                {/* Arrow */}
+                <Tooltip.Arrow
+                  className="fill-white dark:fill-gray-800"
+                  width={12}
+                  height={6}
+                />
+              </div>
+            </Tooltip.Content>
+          </Tooltip.Portal>
+        )}
       </Tooltip.Root>
     </Tooltip.Provider>
   );
