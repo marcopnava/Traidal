@@ -29,6 +29,6 @@ export const Card: React.FC<CardProps> = ({ children, className = '', title, act
         </div>
       )}
       {children}
-    </Component>
+    </div>
   );
 };
