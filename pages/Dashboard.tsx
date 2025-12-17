@@ -132,42 +132,11 @@ export const Dashboard = () => {
   // Welcome Banner Component
   const WelcomeBanner = () => {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ 
-          duration: 0.3,
-          ease: "easeOut"
-        }}
-        className="mb-8"
-      >
+      <div className="mb-8">
         <Card className="bg-gradient-to-br from-accent/10 via-accent-soft/50 to-background dark:from-accent/20 dark:via-gray-800/50 dark:to-gray-900 border-2 border-accent/30 dark:border-accent/20 relative overflow-hidden shadow-2xl">
-          {/* Animated background elements - reduced animation intensity */}
-          <motion.div
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.08, 0.12, 0.08],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{
-              scale: [1, 1.15, 1],
-              opacity: [0.08, 0.1, 0.08],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 0.5
-            }}
-            className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
-          />
+          {/* Background elements senza animazione */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 p-2">
             <div className="flex items-center gap-4 flex-1">
@@ -193,7 +162,7 @@ export const Dashboard = () => {
             </button>
           </div>
         </Card>
-      </motion.div>
+      </div>
     );
   };
 
