@@ -25,11 +25,8 @@ export const SupabaseService = {
     const dbAccount = transformAccountToDB(account, user.id);
     
     // Log the data being sent (for debugging)
-    console.log('Saving account to DB:', {
-      ...dbAccount,
-      initial_balance: dbAccount.initial_balance,
-      user_id: dbAccount.user_id
-    });
+    console.log('Saving account to DB:', JSON.stringify(dbAccount, null, 2));
+    console.log('User ID:', user.id);
     
     const { data, error } = await supabase
       .from('accounts')
@@ -39,15 +36,32 @@ export const SupabaseService = {
       .select();
     
     if (error) {
-      console.error('Error saving account:', error);
-      console.error('Error details:', {
+      console.error('Supabase error saving account:', {
         message: error.message,
+        code: error.code,
         details: error.details,
         hint: error.hint,
-        code: error.code
+        fullError: error
       });
-      throw new Error(error.message || 'Failed to save account');
+      
+      // Provide more detailed error message based on error code
+      let errorMsg = error.message || 'Failed to save account';
+      if (error.code === '42501') {
+        errorMsg = 'Permission denied. Please check Row Level Security (RLS) policies on the accounts table.';
+      } else if (error.code === '23502') {
+        errorMsg = `Missing required field: ${error.hint || 'unknown field'}`;
+      } else if (error.code === '23505') {
+        errorMsg = 'An account with this ID already exists.';
+      } else if (error.code === 'PGRST116') {
+        errorMsg = 'No rows returned. Check RLS policies.';
+      } else if (error.details) {
+        errorMsg = `${error.message}: ${error.details}`;
+      }
+      
+      throw new Error(errorMsg); 
     }
+    
+    console.log('Account saved successfully:', data);
     
     if (!data || data.length === 0) {
       throw new Error('Account saved but no data returned');
@@ -289,28 +303,35 @@ function transformAccountToDB(account: Account, userId: string): any {
   // Convert undefined to null for Supabase (Supabase doesn't accept undefined)
   const toNull = (value: any) => value === undefined ? null : value;
   
+  // Ensure numeric values are properly formatted
+  const toNumber = (value: any): number | null => {
+    if (value === undefined || value === null) return null;
+    const num = typeof value === 'number' ? value : parseFloat(value);
+    return isNaN(num) ? null : num;
+  };
+  
   return {
     id: account.id,
     user_id: userId,
-    name: account.name,
+    name: account.name?.trim() || '',
     type: account.type,
     broker: account.broker,
     phase: toNull(account.phase),
     challenge_type: toNull(account.challengeType),
     currency: account.currency,
-    initial_balance: account.initialBalance,
-    challenge_cost: toNull(account.challengeCost),
-    max_drawdown_limit: toNull(account.maxDrawdownLimit),
-    daily_drawdown_limit: toNull(account.dailyDrawdownLimit),
-    profit_split_percent: toNull(account.profitSplitPercent),
-    phase1_profit_target: toNull(account.phase1ProfitTarget),
-    phase2_profit_target: toNull(account.phase2ProfitTarget),
-    funded_profit_target: toNull(account.fundedProfitTarget),
-    phase1_profit_target_percent: toNull(account.phase1ProfitTargetPercent),
-    phase2_profit_target_percent: toNull(account.phase2ProfitTargetPercent),
-    funded_profit_target_percent: toNull(account.fundedProfitTargetPercent),
-    current_phase_pnl: toNull(account.currentPhasePnL),
-    status: account.status
+    initial_balance: toNumber(account.initialBalance),
+    challenge_cost: toNumber(account.challengeCost),
+    max_drawdown_limit: toNumber(account.maxDrawdownLimit),
+    daily_drawdown_limit: toNumber(account.dailyDrawdownLimit),
+    profit_split_percent: toNumber(account.profitSplitPercent),
+    phase1_profit_target: toNumber(account.phase1ProfitTarget),
+    phase2_profit_target: toNumber(account.phase2ProfitTarget),
+    funded_profit_target: toNumber(account.fundedProfitTarget),
+    phase1_profit_target_percent: toNumber(account.phase1ProfitTargetPercent),
+    phase2_profit_target_percent: toNumber(account.phase2ProfitTargetPercent),
+    funded_profit_target_percent: toNumber(account.fundedProfitTargetPercent),
+    current_phase_pnl: toNumber(account.currentPhasePnL),
+    status: account.status || 'ACTIVE' // Default to ACTIVE if not provided
   };
 }
 
