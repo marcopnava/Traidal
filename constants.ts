@@ -8,11 +8,19 @@ export const CHALLENGE_TYPES = Object.values(PropChallengeType);
 
 export const TRADING_PAIRS = [
   // Forex Major
-  'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'USDCAD', 'AUDUSD', 'NZDUSD',
+  'AUDUSD', 'EURUSD', 'GBPUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY',
+  // Forex Cross AUD
+  'AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD',
+  // Forex Cross CAD
+  'CADCHF', 'CADJPY',
+  // Forex Cross CHF
+  'CHFJPY',
   // Forex Cross EUR
   'EURAUD', 'EURCAD', 'EURCHF', 'EURGBP', 'EURJPY', 'EURNZD',
   // Forex Cross GBP
   'GBPAUD', 'GBPCAD', 'GBPCHF', 'GBPJPY', 'GBPNZD',
+  // Forex Cross NZD
+  'NZDCAD', 'NZDCHF', 'NZDJPY',
   // Indices
   'US100', 'US500', 'US30', 'GER40',
   // Commodities
