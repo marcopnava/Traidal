@@ -1,14 +1,12 @@
-export default function Logo({ size = 28 }: { size?: number }) {
+export default function Logo({ size = 28, variant = 'dark' }: { size?: number; variant?: 'dark' | 'light' }) {
+  const color = variant === 'light' ? '#ffffff' : '#862165';
   return (
-    <div className="flex items-center gap-2 select-none">
-      <div
-        className="rounded-lg bg-gradient-to-br from-brand-600 to-brand-900 text-white grid place-items-center font-extrabold"
-        style={{ width: size, height: size, fontSize: size * 0.5 }}
+    <div className="flex items-center select-none" style={{ gap: size * 0.25 }}>
+      <span
+        className="font-extrabold tracking-tight lowercase"
+        style={{ fontSize: size, color, letterSpacing: '-0.03em' }}
       >
-        T
-      </div>
-      <span className="font-extrabold tracking-tight text-brand-900" style={{ fontSize: size * 0.7 }}>
-        Traidal
+        skrill
       </span>
     </div>
   );

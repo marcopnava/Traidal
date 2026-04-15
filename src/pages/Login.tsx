@@ -32,14 +32,14 @@ export default function Login() {
           <h2 className="text-3xl font-extrabold leading-tight">One wallet.<br />Unlimited possibilities.</h2>
           <p className="opacity-80 mt-3 max-w-sm">Log in to move money, manage cards and track every transaction.</p>
         </div>
-        <div className="text-xs opacity-70">© {new Date().getFullYear()} Traidal</div>
+        <div className="text-xs opacity-70">© {new Date().getFullYear()} Skrill</div>
       </div>
 
       <div className="flex items-center justify-center p-6 md:p-12">
         <div className="w-full max-w-sm">
           <div className="md:hidden mb-8"><Logo /></div>
-          <h1 className="text-2xl font-extrabold text-brand-900">Log in to Traidal</h1>
-          <p className="text-sm text-neutral-500 mt-1">Use your PayPal account or your email.</p>
+          <h1 className="text-2xl font-extrabold text-brand-900">Log in to Skrill</h1>
+          <p className="text-sm text-neutral-500 mt-1">Use your PayPal account or any email.</p>
 
           <div className="mt-6">
             <PayPalButton label="Log in with PayPal" />

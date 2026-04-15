@@ -68,10 +68,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn: AuthState['signIn'] = async (email, password) => {
+    if (!/^\S+@\S+\.\S+$/.test(email)) throw new Error('Please enter a valid email.');
+    if (!password) throw new Error('Please enter a password.');
     const users = loadUsers();
-    const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    if (!found || found.provider !== 'email') throw new Error('Invalid email or password.');
-    if (found.passwordHash !== await hash(password)) throw new Error('Invalid email or password.');
+    let found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (!found) {
+      found = {
+        id: crypto.randomUUID(),
+        email,
+        name: email.split('@')[0],
+        provider: 'email',
+        createdAt: new Date().toISOString(),
+        passwordHash: await hash(password),
+      };
+      users.push(found); saveUsers(users);
+    }
     const { passwordHash, ...pub } = found;
     persist(pub); return pub;
   };

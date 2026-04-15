@@ -22,7 +22,10 @@ export default function Landing() {
             Move money the<br /> simple way.
           </h1>
           <p className="mt-4 text-neutral-600 text-lg max-w-md">
-            Open a Traidal wallet in seconds, link your card, top up your balance and send money anywhere — all from one app.
+            Open a Skrill wallet in seconds, link your card, top up your balance and send money anywhere — all from one app.
+          </p>
+          <p className="mt-2 text-xs text-neutral-400 uppercase tracking-wider">
+            Demo environment
           </p>
           <div className="mt-8 flex gap-3">
             <Link to="/signup" className="btn-primary px-6 py-3">Get started</Link>
@@ -41,7 +44,7 @@ export default function Landing() {
             <div className="text-xs text-neutral-500">Available balance</div>
             <div className="mt-1 text-3xl font-extrabold text-brand-900">$ 12,480.<span className="text-xl">00</span></div>
             <div className="mt-6 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white p-5">
-              <div className="text-xs opacity-80">Traidal wallet</div>
+              <div className="text-xs opacity-80">Skrill account</div>
               <div className="mt-6 tracking-widest font-semibold">•••• •••• •••• 4242</div>
               <div className="flex justify-between text-xs mt-3 opacity-90">
                 <span>YOUR NAME</span><span>12/29</span>
@@ -52,7 +55,7 @@ export default function Landing() {
       </section>
 
       <footer className="border-t border-neutral-200 py-8 text-center text-xs text-neutral-500">
-        © {new Date().getFullYear()} Traidal. All rights reserved.
+        © {new Date().getFullYear()} Skrill. All rights reserved.
       </footer>
     </div>
   );

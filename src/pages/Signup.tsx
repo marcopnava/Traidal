@@ -31,10 +31,10 @@ export default function Signup() {
       <div className="hidden md:flex bg-gradient-to-br from-brand-700 to-brand-900 text-white p-12 flex-col justify-between">
         <Logo size={32} />
         <div>
-          <h2 className="text-3xl font-extrabold leading-tight">Join Traidal.<br />It only takes a minute.</h2>
+          <h2 className="text-3xl font-extrabold leading-tight">Join Skrill.<br />It only takes a minute.</h2>
           <p className="opacity-80 mt-3 max-w-sm">Create your wallet, link a card and start sending money.</p>
         </div>
-        <div className="text-xs opacity-70">© {new Date().getFullYear()} Traidal</div>
+        <div className="text-xs opacity-70">© {new Date().getFullYear()} Skrill</div>
       </div>
 
       <div className="flex items-center justify-center p-6 md:p-12">
