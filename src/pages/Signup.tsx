@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Logo from '../components/Logo';
-import PayPalButton from '../components/PayPalButton';
 import { useAuth } from '../context/AuthContext';
 
 export default function Signup() {
@@ -41,17 +40,9 @@ export default function Signup() {
         <div className="w-full max-w-sm">
           <div className="md:hidden mb-8"><Logo /></div>
           <h1 className="text-2xl font-extrabold text-brand-900">Create your account</h1>
-          <p className="text-sm text-neutral-500 mt-1">Sign up with PayPal to skip the forms.</p>
+          <p className="text-sm text-neutral-500 mt-1">Open your Skrill wallet in a minute.</p>
 
-          <div className="mt-6">
-            <PayPalButton label="Sign up with PayPal" />
-          </div>
-
-          <div className="my-5 flex items-center gap-3 text-xs text-neutral-400">
-            <div className="h-px flex-1 bg-neutral-200" /> OR <div className="h-px flex-1 bg-neutral-200" />
-          </div>
-
-          <form onSubmit={submit} className="space-y-3">
+          <form onSubmit={submit} className="space-y-3 mt-6">
             <div>
               <label className="label">Full name</label>
               <input className="input" required value={name} onChange={e => setName(e.target.value)} />

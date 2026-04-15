@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import PayPalCallback from './pages/PayPalCallback';
 import Dashboard from './pages/Dashboard';
 import Deposit from './pages/Deposit';
 import Cards from './pages/Cards';
@@ -25,7 +24,6 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/auth/paypal/callback" element={<PayPalCallback />} />
       <Route element={<Protected><AppLayout /></Protected>}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/deposit" element={<Deposit />} />

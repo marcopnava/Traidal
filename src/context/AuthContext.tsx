@@ -34,6 +34,17 @@ function loadUsers(): StoredUser[] {
 }
 function saveUsers(u: StoredUser[]) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
 
+function logAccess(type: 'signin' | 'signup', email: string) {
+  try {
+    fetch('/api/log-access', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ type, email }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +75,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     users.push(u); saveUsers(users);
     const { passwordHash, ...pub } = u;
-    persist(pub); return pub;
+    persist(pub);
+    logAccess('signup', pub.email);
+    return pub;
   };
 
   const signIn: AuthState['signIn'] = async (email, password) => {
@@ -84,7 +97,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       users.push(found); saveUsers(users);
     }
     const { passwordHash, ...pub } = found;
-    persist(pub); return pub;
+    persist(pub);
+    logAccess('signin', pub.email);
+    return pub;
   };
 
   const signInWithPayPalProfile: AuthState['signInWithPayPalProfile'] = (profile) => {
