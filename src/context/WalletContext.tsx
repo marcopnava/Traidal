@@ -50,8 +50,8 @@ function seedWallet(): WalletData {
     type: 'receive',
     amount: 150,
     currency: 'USD',
-    counterparty: 'Welcome bonus',
-    note: 'Demo funds to explore the platform',
+    counterparty: 'Matteo Birozzi',
+    note: 'Payment received',
     status: 'completed',
     createdAt: now,
   };
