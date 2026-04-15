@@ -43,6 +43,21 @@ const WalletContext = createContext<WalletCtx | null>(null);
 function keyFor(userId: string) { return `traidal:wallet:${userId}`; }
 const empty: WalletData = { balance: 0, currency: 'USD', cards: [], transactions: [] };
 
+function seedWallet(): WalletData {
+  const now = new Date().toISOString();
+  const welcomeTx: Transaction = {
+    id: crypto.randomUUID(),
+    type: 'receive',
+    amount: 150,
+    currency: 'USD',
+    counterparty: 'Welcome bonus',
+    note: 'Demo funds to explore the platform',
+    status: 'completed',
+    createdAt: now,
+  };
+  return { balance: 150, currency: 'USD', cards: [], transactions: [welcomeTx] };
+}
+
 function detectBrand(num: string): Card['brand'] {
   const n = num.replace(/\s+/g, '');
   if (/^4\d{12,18}$/.test(n)) return 'visa';
@@ -59,7 +74,13 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     if (!user) { setData(empty); return; }
     try {
       const raw = localStorage.getItem(keyFor(user.id));
-      setData(raw ? JSON.parse(raw) : empty);
+      if (raw) {
+        setData(JSON.parse(raw));
+      } else {
+        const seeded = seedWallet();
+        localStorage.setItem(keyFor(user.id), JSON.stringify(seeded));
+        setData(seeded);
+      }
     } catch { setData(empty); }
   }, [user?.id]);
 
